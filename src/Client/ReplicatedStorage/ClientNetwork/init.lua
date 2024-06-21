@@ -1,6 +1,9 @@
---!strict
+--!strict 
+--!optimize 2 
+
+
+
 local HttpService : HttpService = game:GetService("HttpService")
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Types = require(game.ReplicatedStorage.ClientNetwork.Types)
 local ClientResponse = require(game.ReplicatedStorage.ClientAPI.ClientResponse)

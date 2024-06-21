@@ -1,24 +1,21 @@
---!strict
-local RunService : RunService = shared:Inject("RunService")
-local KnockbackService = shared:Inject("KnockbackService")
+--!strict 
+--!optimize 2 
 
-local queue = {}
-RunService.Heartbeat:Connect(function()
-    if queue[1] then
-        local data = table.remove(queue, 1)
-        data:Start()
-    end
-end)
+local KnockbackService = shared:Inject("KnockbackService")
 
 return {
     PlayerHit = function(data : any)
         warn(`PlayerHit: {data}`)
-        table.insert(queue, data)
         return data
     end,
 
     PlayerDied = function(data : any)
         warn(`PlayerDied: {data}`)
         return data
-    end
+    end,
+
+    Knockback = function(payload)
+        warn(`PlayerKnockback: {payload}`)
+        KnockbackService.Impulse(unpack(payload.data))
+    end,
 }

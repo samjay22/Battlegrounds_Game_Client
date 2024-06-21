@@ -1,4 +1,4 @@
---!strict
+
 local GlobalUpdateService = require(game.ReplicatedStorage.Utility.GlobalUpdateService)
 
 local _ActiveQueues : {{(dt : number) -> ()}} = {}

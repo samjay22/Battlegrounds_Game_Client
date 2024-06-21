@@ -2,14 +2,10 @@
 --!optimize 2 
 
 
+local Methods = {}
 
-
-local Character = script.Parent
-local Humanoid = Character:WaitForChild("Humanoid")
-Humanoid.BreakJointsOnDeath = false
-
-local function OnHumanoidDied()
-	for _, Part in ipairs(Character:GetChildren()) do
+function Methods.ApplayRagoll(Character : Model)
+    for _, Part in ipairs(Character:GetChildren()) do
 		if Part:IsA("BasePart") then
 			local Motor6D = Part:FindFirstChildWhichIsA("Motor6D")
 			if Motor6D then
@@ -36,4 +32,4 @@ local function OnHumanoidDied()
 	end
 end
 
-Humanoid.Died:Once(OnHumanoidDied)
+return Methods

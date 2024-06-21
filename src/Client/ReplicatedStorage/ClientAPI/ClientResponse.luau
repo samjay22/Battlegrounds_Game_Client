@@ -1,5 +1,6 @@
---!strict
-local HttpService : HttpService = game:GetService("HttpService")
+--!strict 
+--!optimize 2 
+
 
 local GlobalUpdateService = require(game.ReplicatedStorage.Utility.GlobalUpdateService)
 local Types = require(game.ReplicatedStorage.ClientNetwork.Types)

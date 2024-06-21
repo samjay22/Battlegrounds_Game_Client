@@ -1,4 +1,4 @@
---!strict
+
 local RunService : RunService = game:GetService("RunService")
 
 local GlobalUpdateService = {}

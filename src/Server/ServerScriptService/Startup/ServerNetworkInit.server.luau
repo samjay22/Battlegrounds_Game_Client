@@ -1,4 +1,4 @@
---!strict
+
 
 local ServerAPI = require(game.ServerStorage.ServerAPI)
 

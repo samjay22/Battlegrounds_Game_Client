@@ -1,5 +1,9 @@
---! strict
---! optimize 2
+--!strict 
+--!optimize 2 
+
+
+
+
 
 --[[
     @author: idkfr
@@ -9,20 +13,17 @@
         Knockback.new(User: Model, Target: Model, Range: number, Height: number)
         -- Creates the Knockback Force.
 
-        Knockback:Start()
-        -- Starts / Impulses the Knockback Force.
-        _______________________________________________________________
-
         Knockback:Impulse(User: Model, Target: Model, Range: number, Height: number, DelayTime: number?)
         -- Instantly Creates and Impulses a Force.
     }
 --]]
 
+local CharacterEntity = require(game.ReplicatedStorage.Types.Character)
+
 local Knockback = {}
-Knockback.__index = Knockback
 
 -- Calculates the Total Mass in a Body.
-function Knockback:CalculateTotalMass(Model : Model) : number
+function Knockback.CalculateTotalMass(Model : Model) : number
     assert(Model and Model:IsA("Model"), "Type (Model) is not a Model!");
     
     local TotMass = 0;
@@ -35,56 +36,23 @@ function Knockback:CalculateTotalMass(Model : Model) : number
 
     return TotMass;
 end
-
--- Creates the Knockback Force.
-function Knockback.new(User: Model, Target: Model, Range: number, Height: number)
-    local self = setmetatable({
-        _User = User,
-        _Target = Target,
-        _Range = Range,
-        _Height = Height,
-    }, Knockback);
-
-    return self
-end
-
 -- Starts / Impulses the Knockback Force.
-function Knockback:Start()
-    local User = self._User;
-    local Target = self._Target;
+function Knockback.Impulse(characterEntity : CharacterEntity.CharacterEntity, targetEntity : CharacterEntity.CharacterEntity, AdditionalArgs)
+    local User = characterEntity.CurrentCharacterModel;
+    local Target = targetEntity.CurrentCharacterModel;
 
-    local Range = self._Range;
-    local Height = self._Height;
+    local Range = AdditionalArgs.Range or 10;
+    local Height = AdditionalArgs.Height or 10;
 
-    local Mass = Knockback:CalculateTotalMass(Target);
+    local Mass = Knockback.CalculateTotalMass(Target);
 
+    if not User.PrimaryPart then return warn(`{User.Name} has no PrimaryPart`) end
     local LookDirection = User.PrimaryPart.CFrame.LookVector;
     local UpDirection = Vector3.new(0, Mass * Height, 0);
 
     --Target.PrimaryPart:SetNetworkOwner(nil);
-
+    if not Target.PrimaryPart then return warn(`{Target.Name} has no PrimaryPart`) end
     Target.PrimaryPart:ApplyImpulse(LookDirection * Mass * Range + UpDirection);
-
-    task.delay(2.5, function()
-        setmetatable(self, nil)
-    end)
-end
-
--- Instantly Creates and Impulses a Force.
-function Knockback:Impulse(User: Model, Target: Model, Range: number, Height: number)
-    if not User.PrimaryPart or not Target.PrimaryPart then return end
-    
-    local Mass = Knockback:CalculateTotalMass(Target);
-    local LookDirection = User.PrimaryPart.CFrame.LookVector;
-    local UpDirection = Vector3.new(0, Mass * Height, 0);
-
-    --Target.PrimaryPart:SetNetworkOwner(nil);
-
-    Target.PrimaryPart:ApplyImpulse(LookDirection * Mass * Range + UpDirection);
-    
-    task.delay(2.5, function()
-        setmetatable(self, nil)
-    end)
 end
 
 return Knockback

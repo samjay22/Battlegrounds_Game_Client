@@ -1,8 +1,12 @@
---!strict
-local HttpService : HttpService = game:GetService("HttpService")
+--!strict 
+--!optimize 2 
+
+
+local GlobalUpdateService = require(game.ReplicatedStorage.Utility.GlobalUpdateService)
 
 local ClientAPI = {}
 local Delegates = {}
+local _RequestQueue = {}
 
 for _, module in ipairs(script:GetChildren()) do
     if module:IsA("ModuleScript") then
@@ -20,8 +24,17 @@ end
 local NetworkTypes = require(game.ReplicatedStorage.ClientNetwork.Types)
 function ClientAPI.ProcessRequest(endpoint : string, payload : NetworkTypes.ResponsePayload)
    if Delegates[endpoint] then
-       Delegates[endpoint](payload)
+       table.insert(_RequestQueue, {Delegates[endpoint], payload})
    end 
 end
+
+GlobalUpdateService.AddGlobalUpdate(function(dt : number)
+    local requestData = table.remove(_RequestQueue)
+    if requestData == nil then
+        return
+    end
+    
+    requestData[1](requestData[2])
+end)
 
 return ClientAPI

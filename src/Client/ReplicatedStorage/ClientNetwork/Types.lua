@@ -1,4 +1,8 @@
---!strict
+--!strict 
+--!optimize 2 
+
+
+
 export type RequestPayload = {
     requestID : string,
     data : any

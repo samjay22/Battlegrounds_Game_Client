@@ -1,4 +1,8 @@
---!strict
+--!strict 
+--!optimize 2 
+
+
+
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 game.ReplicatedStorage:WaitForChild("ClientNetwork"):WaitForChild("RemoteEvent").OnClientEvent:Connect(function(endpoint : string, data)
